@@ -1,0 +1,11 @@
+{% extends "weatherdaily/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Weather in {{city}}, {{state}}.</h1>
+    <h2>It is Going to be {{weather}}!</h2>
+    <img src="{{image}}" alt="weather"  style="width: 50%; height: 200px;" />
+    <h3>The real temperature is {{real_temp}} but it's going to feel like {{feelslike_string}}</h3>
+</div>
+{% endblock %}
