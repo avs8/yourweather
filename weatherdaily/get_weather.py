@@ -16,7 +16,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yourweather.settings")
 data = Weather.objects.all()
 images = WeatherImage.objects.all()
 image_url = images[0].get_absolute_image_url
-image = 'http://127.0.0.1:8000'+image_url
+
+image = 'http://127.0.0.1:8000' + image_url
 
 locations = [i.encode("utf8").replace('\t', " ").split(',') for i in Weather.objects.values_list('location', flat=True)]
 

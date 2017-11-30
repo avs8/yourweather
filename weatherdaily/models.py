@@ -129,3 +129,11 @@ class WeatherImage(models.Model):
                                    width_field='weatherPic_width')
     weatherPic_height = models.IntegerField(default=0)
     weatherPic_width= models.IntegerField(default=0)
+
+    def __str__(self):
+      return self.weatherPic.name
+
+    @property
+    def get_absolute_image_url(self):
+      return '%s' % self.weatherPic.url
+
