@@ -24,12 +24,19 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
-EMAIL_HOST = os.environ['EMAIL_HOST']
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-EMAIL_PORT = os.environ['EMAIL_HOST']
-EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
+DEFAULT_FROM_EMAIL='myweather10@gmail.com'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER='myweather10@gmail.com'
+EMAIL_HOST_PASSWORD='myweather101'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+
+# DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
+# EMAIL_HOST = os.environ['EMAIL_HOST']
+# EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+# EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+# EMAIL_PORT = os.environ['EMAIL_HOST']
+# EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
 
 
 """
@@ -53,7 +60,7 @@ INSTALLED_APPS = [
     'weatherdaily',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -131,5 +138,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_ROOT = 'yourweather/static/'
+
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    # '/var/www/static/',
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")

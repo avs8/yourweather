@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 
 from django.db import models
+from django.conf import settings
 
 ADDRESS_CHOICES = (
  ('Where Do You Live?', 'Where Do You Live?'),
@@ -116,3 +117,24 @@ class Weather(models.Model):
 
     def __str__(self):
         return self.email
+
+
+def upload_location(object, filename):
+    return "%s" % filename
+
+
+class WeatherImage(models.Model):
+    weatherPic = models.ImageField(upload_to=upload_location,
+                                   null=True, blank=True,
+                                   height_field='weatherPic_height',
+                                   width_field='weatherPic_width')
+    weatherPic_height = models.IntegerField(default=0)
+    weatherPic_width = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.weatherPic.name
+
+    @property
+    def get_absolute_image_url(self):
+        return '%s' % self.weatherPic.url
+
