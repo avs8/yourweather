@@ -8,5 +8,6 @@ class Command(BaseCommand):
 
     # A command must define handle()
     def handle(self, *args, **options):
-        self.stdout.write("weather related email is sending")
+        get_weather.send_email()
+        self.stdout.write('sending email')
 

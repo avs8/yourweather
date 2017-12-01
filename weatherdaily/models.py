@@ -119,8 +119,9 @@ class Weather(models.Model):
         return self.email
 
 
-def upload_location(obj, filename):
-    return "%s%s" % (obj.id, filename)
+def upload_location(object, filename):
+    return "%s" % filename
+
 
 class WeatherImage(models.Model):
     weatherPic = models.ImageField(upload_to=upload_location,
@@ -128,12 +129,12 @@ class WeatherImage(models.Model):
                                    height_field='weatherPic_height',
                                    width_field='weatherPic_width')
     weatherPic_height = models.IntegerField(default=0)
-    weatherPic_width= models.IntegerField(default=0)
+    weatherPic_width = models.IntegerField(default=0)
 
     def __str__(self):
-      return self.weatherPic.name
+        return self.weatherPic.name
 
     @property
     def get_absolute_image_url(self):
-      return '%s' % self.weatherPic.url
+        return '%s' % self.weatherPic.url
 

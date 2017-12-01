@@ -13,13 +13,6 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yourweather.settings")
-data = Weather.objects.all()
-images = WeatherImage.objects.all()
-image_url = images[0].get_absolute_image_url
-
-image = 'http://127.0.0.1:8000' + image_url
-
-locations = [i.encode("utf8").replace('\t', " ").split(',') for i in Weather.objects.values_list('location', flat=True)]
 
 
 # def get_image(feelslike_string):
@@ -48,47 +41,55 @@ locations = [i.encode("utf8").replace('\t', " ").split(',') for i in Weather.obj
 #         pic = images['nice']
 #     return pic
 
+def send_email():
+    data = Weather.objects.all()
+    images = WeatherImage.objects.all()
+    image_url = images[0].get_absolute_image_url
 
-for i, v in enumerate(locations):
-    location_city = '/' + locations[i][0].replace(' ', '_')
-    location_state = locations[i][1].replace(' ', '_')
-    url = 'http://api.wunderground.com/api/' + settings.WEATHER_API_KEY + '/geolookup/conditions/q/' + location_state + location_city + '.json'
-    print (url)
-    f = urllib2.urlopen(url)
-    json_string = f.read()
-    parsed_json = json.loads(json_string)
-    city = parsed_json['location']['city']
-    state = parsed_json['location']['state']
-    weather = parsed_json['current_observation']['weather'].lower()
-    real_temp = parsed_json['current_observation']['temperature_string']
-    tem = float(real_temp[:4])
-    if tem > 70:
-        subject = "It's Going To Be " + weather.title() + " Today But Hot!"
-    elif tem < 70 and tem > 50:
-        subject = "It's Going To Be " + weather.title() + " Today But Warm!"
-    elif tem < 50 and tem > 30:
-        subject = "It's Going To Be " + weather.title() + " Today But Cold!"
-    elif tem < 20:
-        subject = "It's Going To Be " + weather.title() + " Today But Really Cold!"
-    feelslike_string = parsed_json['current_observation']['feelslike_string']
-    image = image
-    print image
-    email = (Weather.objects.get(Q(location__contains=city) & Q(email=data[i])))
-    temp = get_template('weatherdaily/email.html')
-    msg = EmailMultiAlternatives(subject, temp.render(Context({
-        'city': city,
-        'state': state,
-        'weather': weather,
-        'real_temp': real_temp,
-        'feelslike_string': feelslike_string,
-        'image': image
-    })), settings.DEFAULT_FROM_EMAIL, [email])
-    msg.attach_alternative(temp.render(Context({
-        'city': city,
-        'state': state,
-        'weather': weather,
-        'real_temp': real_temp,
-        'feelslike_string': feelslike_string,
-        'image': image
-    })), "text/html")
-    msg.send()
+    image = 'http://127.0.0.1:8000' + image_url
+
+    locations = [i.encode("utf8").replace('\t', " ").split(',') for i in
+                 Weather.objects.values_list('location', flat=True)]
+    for i, v in enumerate(locations):
+        location_city = '/' + locations[i][0].replace(' ', '_')
+        location_state = locations[i][1].replace(' ', '_')
+        url = 'http://api.wunderground.com/api/' + settings.WEATHER_API_KEY + '/geolookup/conditions/q/' + location_state + location_city + '.json'
+        print (url)
+        f = urllib2.urlopen(url)
+        json_string = f.read()
+        parsed_json = json.loads(json_string)
+        city = parsed_json['location']['city']
+        state = parsed_json['location']['state']
+        weather = parsed_json['current_observation']['weather'].lower()
+        real_temp = parsed_json['current_observation']['temperature_string']
+        tem = float(real_temp[:4])
+        if tem > 70:
+            subject = "It's Going To Be " + weather.title() + " Today But Hot!"
+        elif tem < 70 and tem > 50:
+            subject = "It's Going To Be " + weather.title() + " Today But Warm!"
+        elif tem < 50 and tem > 30:
+            subject = "It's Going To Be " + weather.title() + " Today But Cold!"
+        elif tem < 20:
+            subject = "It's Going To Be " + weather.title() + " Today But Really Cold!"
+        feelslike_string = parsed_json['current_observation']['feelslike_string']
+        image = image
+        print image
+        email = (Weather.objects.get(Q(location__contains=city) & Q(email=data[i])))
+        temp = get_template('weatherdaily/email.html')
+        msg = EmailMultiAlternatives(subject, temp.render(Context({
+            'city': city,
+            'state': state,
+            'weather': weather,
+            'real_temp': real_temp,
+            'feelslike_string': feelslike_string,
+            'image': image
+        })), settings.DEFAULT_FROM_EMAIL, [email])
+        msg.attach_alternative(temp.render(Context({
+            'city': city,
+            'state': state,
+            'weather': weather,
+            'real_temp': real_temp,
+            'feelslike_string': feelslike_string,
+            'image': image
+        })),    "text/html")
+        msg.send()
