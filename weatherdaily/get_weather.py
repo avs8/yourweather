@@ -15,39 +15,29 @@ from django.core.mail import EmailMultiAlternatives
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yourweather.settings")
 
 
-# def get_image(feelslike_string):
-#     images = {'cloudy': 'http://www.freeimageslive.com/galleries/nature/weather/pics/rain_clouds_162145.jpg',
-#               'partlycloudy': 'http://www.freeimageslive.com/galleries/nature/weather/pics/rain_clouds_162145.jpg',
-#               'cold': 'http://data.whicdn.com/images/18499845/56998751503531805_MHunGchK_c_large.jpg',
-#               'snowy': 'http://www.freeimageslive.com/galleries/nature/weather/pics/ice_storm%20morning_228600.jpg',
-#               'windy': 'http://www.freeimages.co.uk/galleries/nature/weather/slides/lakeside_winter_mist_207837.htm',
-#               'rain':'http://www.freeimageslive.com/galleries/nature/weather/pics/rainy_day_wet_1013459.jpg',
-#               'nice': 'http://www.freeimageslive.com/galleries/nature/weather/pics/rainbow_qheensland_5232088.jpg'}
-#     if feelslike_string in ['rain', 'scattered thunderstorms', 'showers', 'scattered showers', 'light rain']:
-#         pic = images['rain']
-#     elif feelslike_string in ['cloudy', 'overcast', 'chance of storm', 'mostly cloudy']:
-#         pic = images['cloudy']
-#     elif feelslike_string in ['partly cloudy']:
-#         pic = images['partlycloudy']
-#     elif feelslike_string in ['storm', 'chance of tstorm']:
-#         pic = images['windy']
-#     elif feelslike_string in ['light snow', 'icy', 'snow Showers', 'rain and snow']:
-#         pic = images['snowy']
-#     elif feelslike_string in ['clear', 'sunny', 'partly sunny', 'mostly sunny'] and tem <= 50:
-#         pic = images['cold']
-#     elif feelslike_string in ['clear', 'sunny', 'partly sunny', 'mostly sunny'] and tem >= 60:
-#         pic = images['nice']
-#     else:
-#         pic = images['nice']
-#     return pic
+def get_image(weather, tem):
+
+    weather = weather.lower()
+    if weather in ['rain', 'scattered thunderstorms', 'showers', 'scattered showers', 'light rain']:
+        pic = WeatherImage.objects.get(weatherPic="rain.jpg")
+    elif weather in ['cloudy', 'overcast', 'chance of storm', 'mostly cloudy']:
+        pic = WeatherImage.objects.get(weatherPic="cloudy.jpg")
+    elif weather in ['partly cloudy']:
+        pic = WeatherImage.objects.get(weatherPic="partlycloudy.jpg")
+    elif weather in ['storm', 'chance of tstorm']:
+        pic = WeatherImage.objects.get(weatherPic="rain.jpg")
+    elif weather in ['light snow', 'icy', 'snow Showers', 'rain and snow']:
+        pic = WeatherImage.objects.get(weatherPic="rain.jpg")
+    elif weather in ['clear', 'sunny', 'partly sunny', 'mostly sunny'] and tem <= 50:
+        pic = WeatherImage.objects.get(weatherPic="sunny.jpg")
+    elif weather in ['clear', 'sunny', 'partly sunny', 'mostly sunny'] and tem >= 60:
+        pic = WeatherImage.objects.get(weatherPic="sunny.jpg")
+    else:
+        pic = WeatherImage.objects.get(weatherPic="nice.jpg")
+    return pic.weatherPic.name
 
 def send_email():
     data = Weather.objects.all()
-    images = WeatherImage.objects.all()
-    image_url = images[0].get_absolute_image_url
-
-    image = 'http://127.0.0.1:8000' + image_url
-
     locations = [i.encode("utf8").replace('\t', " ").split(',') for i in
                  Weather.objects.values_list('location', flat=True)]
     for i, v in enumerate(locations):
@@ -71,8 +61,12 @@ def send_email():
             subject = "It's Going To Be " + weather.title() + " Today But Cold!"
         elif tem < 20:
             subject = "It's Going To Be " + weather.title() + " Today But Really Cold!"
+        weather = parsed_json['current_observation']['weather']
         feelslike_string = parsed_json['current_observation']['feelslike_string']
-        image = image
+        print weather
+        image = get_image(weather, tem)
+        print image
+        image = 'http://127.0.0.1:8000/media/' + image
         print image
         email = (Weather.objects.get(Q(location__contains=city) & Q(email=data[i])))
         temp = get_template('weatherdaily/email.html')
@@ -80,16 +74,16 @@ def send_email():
             'city': city,
             'state': state,
             'weather': weather,
-            'real_temp': real_temp,
             'feelslike_string': feelslike_string,
+            'real_temp': real_temp,
             'image': image
         })), settings.DEFAULT_FROM_EMAIL, [email])
         msg.attach_alternative(temp.render(Context({
             'city': city,
             'state': state,
             'weather': weather,
-            'real_temp': real_temp,
             'feelslike_string': feelslike_string,
+            'real_temp': real_temp,
             'image': image
         })),    "text/html")
         msg.send()
