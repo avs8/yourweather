@@ -11,26 +11,27 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import local_secrets
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yourweather.settings")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = local_secrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+DEFAULT_FROM_EMAIL = local_secrets.DEFAULT_FROM_EMAIL
+EMAIL_HOST = local_secrets.EMAIL_HOST
+EMAIL_HOST_USER = local_secrets.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = local_secrets.EMAIL_HOST
+EMAIL_PORT = local_secrets.EMAIL_PORT
+EMAIL_USE_TLS = local_secrets.EMAIL_USE_TLS
 
-DEFAULT_FROM_EMAIL='myweather10@gmail.com'
-EMAIL_HOST='smtp.gmail.com'
-EMAIL_HOST_USER='myweather10@gmail.com'
-EMAIL_HOST_PASSWORD='myweather101'
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-
+# for later use in heroku
 # DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 # EMAIL_HOST = os.environ['EMAIL_HOST']
 # EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
