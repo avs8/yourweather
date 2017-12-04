@@ -1,7 +1,17 @@
-h1 {
-    margin: 0 0 20px;
-    font-weight: 300;
-    font-size: 20px;
-    color: red;
+body {
+  background-color: hsla(178, 100%, 50%, 0.24);
+}
 
-    }
+h1 {
+  margin-bottom: 5%;
+
+}
+
+#id_email {
+  margin-left: 20px;
+  border-radius: 5px;
+}
+
+hr {
+  border-top: 3px solid black;
+}
