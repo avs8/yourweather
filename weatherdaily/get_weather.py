@@ -36,6 +36,7 @@ def get_image(weather, tem):
         pic = WeatherImage.objects.get(weatherPic="nice.jpg")
     return pic.weatherPic.name
 
+
 def send_email():
     data = Weather.objects.all()
     locations = [i.encode("utf8").replace('\t', " ").split(',') for i in

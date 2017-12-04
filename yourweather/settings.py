@@ -11,26 +11,27 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import local_secrets
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yourweather.settings")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = local_secrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+DEFAULT_FROM_EMAIL = local_secrets.DEFAULT_FROM_EMAIL
+EMAIL_HOST = local_secrets.EMAIL_HOST
+EMAIL_HOST_USER = local_secrets.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = local_secrets.EMAIL_HOST
+EMAIL_PORT = local_secrets.EMAIL_PORT
+EMAIL_USE_TLS = local_secrets.EMAIL_USE_TLS
 
-DEFAULT_FROM_EMAIL='myweather10@gmail.com'
-EMAIL_HOST='smtp.gmail.com'
-EMAIL_HOST_USER='myweather10@gmail.com'
-EMAIL_HOST_PASSWORD='myweather101'
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-
+# for later use in heroku
 # DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 # EMAIL_HOST = os.environ['EMAIL_HOST']
 # EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
@@ -57,10 +58,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'weatherdaily',
+    'debug_toolbar',
+    'weatherdaily'
 ]
 
 MIDDLEWARE_CLASSES = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,6 +71,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'yourweather.urls'
@@ -75,7 +79,7 @@ ROOT_URLCONF = 'yourweather.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -149,3 +153,15 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
+
+
+INTERNAL_IPS = ['127.0.0.1']
+
+
+def show_toolbar(request):
+    return True
+
+
+SHOW_TOOLBAR_CALLBACK = show_toolbar
+
+DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False,}
