@@ -38,9 +38,9 @@ def get_image(weather, tem):
 
 
 def send_email():
-    data = Weather.objects.all()
+    data = Users.objects.all()
     locations = [i.encode("utf8").replace('\t', " ").split(',') for i in
-                 Weather.objects.values_list('location', flat=True)]
+                 Users.objects.values_list('location', flat=True)]
     for i, v in enumerate(locations):
         location_city = '/' + locations[i][0].replace(' ', '_')
         location_state = locations[i][1].replace(' ', '_')
@@ -69,7 +69,7 @@ def send_email():
         print image
         image = 'http://127.0.0.1:8000/media/' + image
         print image
-        email = (Weather.objects.get(Q(location__contains=city) & Q(email=data[i])))
+        email = (Users.objects.get(Q(location__contains=city) & Q(email=data[i])))
         temp = get_template('weatherdaily/email.html')
         msg = EmailMultiAlternatives(subject, temp.render(Context({
             'city': city,

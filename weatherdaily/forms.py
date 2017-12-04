@@ -1,20 +1,20 @@
 from django.core.exceptions import ValidationError
 from django import forms
-from . models import Weather
+from . models import Users
 
 
 class WeatherForm(forms.ModelForm):
     class Meta:
-        model = Weather
+        model = Users
         fields = ['email', 'location']
 
     def __init__(self, *args, **kwargs):
         super(WeatherForm, self).__init__(*args, **kwargs)
-        self.fields['location'].queryset = Weather.objects.order_by('location')
+        self.fields['location'].queryset = Users.objects.order_by('location')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        exists = Weather.objects.filter(email=email).count()
+        exists = Users.objects.filter(email=email).count()
         if email and exists > 0:
             raise forms.ValidationError(u'This email address is already registered.')
         return email

@@ -108,7 +108,7 @@ ADDRESS_CHOICES = (
  ('Winston Salem, North Carolina', 'Winston Salem, NC'))
 
 
-class Weather(models.Model):
+class Users(models.Model):
     email = models.EmailField(unique=True)
     location = models.CharField(max_length=50, choices=ADDRESS_CHOICES, default='Where Do You Live?')
 

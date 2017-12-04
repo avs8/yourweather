@@ -47,8 +47,7 @@ https://accounts.google.com/displayunlockcaptcha
 """
 
 
-WEATHER_API_KEY = os.environ['WEATHER_API_KEY']
-
+WEATHER_API_KEY = local_secrets.WEATHER_API_KEY
 # Application definition
 
 INSTALLED_APPS = [
