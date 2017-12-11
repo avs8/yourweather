@@ -1,6 +1,6 @@
 # yourweather
 Clone the repo, cd into yourweather and activate virtual environment
-# source django-coding/bin/activate
+# source yourweather/bin/activate
 
 # django-version(1.10)
 
