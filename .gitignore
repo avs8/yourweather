@@ -1,3 +1,7 @@
 *.pyc
 local_secrets.py
 .idea
+.Python
+bin
+include
+lib

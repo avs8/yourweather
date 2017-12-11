@@ -1,14 +1,21 @@
 {% extends "weatherdaily/base.html" %}
 {% load static %}
 {% block content %}
-<div class="container">
-<div class="col-md-4 col-md-offset-4">
-<h1>Weather Powered Email</h1>
+<p id="main">
+<h1 class="cover-heading">Weather Powered Email</h1>
+    <p class="lead">You don't have to worry about checking weather information everyday!</p>
+    <p class="lead">Just let us know your email and enjoy weather information first thing in morning right in your inbox!</p>
     <hr>
-<form role="form" action="" method="post">{% csrf_token%}
-    {{ form.as_p }}
-    <input class="btn btn-primary center-block" type="submit" name="Submit" value="Sign up for Newsletter">
+
+
+    <form role="form" action="" method="post">{% csrf_token%}
+     <div class="form-group">
+    {{ form.as_p}}
+     </div>
+    <input class="btn btn-lg btn-primary" type="submit" name="Submit" value="Sign up for Newsletter">
 </form>
+
+
 </div>
-</div>
+
 {% endblock%}
