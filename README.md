@@ -1,7 +1,10 @@
-# yourweather
-Clone the repo, cd into yourweather and activate virtual environment
-# source yourweather/bin/activate
+# Project Name: yourweather
 
-# django-version(1.10)
+# Description
+### I have create this app to fetch data from weather API and send weather information
+### to user every morning in their mail based on their location.
+## Clone the repo, cd into yourweather and activate virtual environment
+## source yourweather/bin/activate
 
-App is currently not done I am working on to make it better.
+## django-version(1.10)
+
